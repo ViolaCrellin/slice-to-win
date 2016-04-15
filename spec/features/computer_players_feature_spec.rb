@@ -21,4 +21,13 @@ describe 'computer versus computer games of varing difficulty' do
       expect(easy_game_fail.play).to eq('NO SOLUTION')
     end
   end
+
+  context 'starting board of [1, 2, 3, 5]' do
+    let(:easy_array_fail_2) {[1, 2, 3, 5]}
+    let(:easy_game_fail_2) {Game.new(easy_array_fail_2)}
+
+    it 'returns NO SOLUTION' do
+      expect(easy_game_fail_2.play).to eq('NO SOLUTION')
+    end
+  end
 end

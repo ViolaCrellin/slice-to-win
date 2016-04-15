@@ -54,13 +54,12 @@ describe Game do
 
     describe '#find_legal_moves' do
 
-      # before do
-      #   game.send(:find_legal_moves)
-      # end
+      after do
+        game.send(:find_legal_moves)
+      end
 
       it 'creates a new legal moves calculator to calculate the legal moves' do
         expect(legal_moves_klass).to receive(:new).with(game.board)
-        game.send(:find_legal_moves)
       end
 
       it 'updates the games\' legal moves attribute' do
@@ -70,14 +69,12 @@ describe Game do
 
       it 'with the legal move calculations it decides if a new turn is necessary' do
         expect(game).to receive(:next_turn)
-        game.send(:find_legal_moves)
       end
 
       it 'not prompt next turn if no legal move found, instead will declare outcome' do
         allow(game).to receive(:right_sized_chunk_available?).and_return(false)
         expect(game).not_to receive(:next_turn)
         expect(game).to receive(:declare_outcome)
-        game.send(:find_legal_moves)
       end
 
     end
