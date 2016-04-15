@@ -1,4 +1,6 @@
 require 'game'
+require 'legal_moves_calculator'
+require 'computer_turn'
 
 describe 'computer versus computer games of varing difficulty' do
 
@@ -7,8 +9,7 @@ describe 'computer versus computer games of varing difficulty' do
     let(:easy_game) {Game.new(easy_array)}
 
     it 'returns a slice position of \'1, 1\' ' do
-      expect(easy_game.play).to eq{'1, 1'}
+      expect(easy_game.play).to eq('1, 1')
     end
-
   end
 end
