@@ -14,6 +14,9 @@ class Game
   end
 
   def play
+    odds_left.size.odd? 
+
+  def play
     odds_left? ? find_legal_moves : declare_outcome
   end
 
@@ -31,7 +34,6 @@ class Game
 
   def next_turn
     current_turn = turn_klass.new(optimal_moves_available, board)
-    print optimal_moves_available
     turn_klass.add(current_turn.slice_choice)
     @board = current_turn.update_board
     play
@@ -59,6 +61,10 @@ class Game
 
   def game_over?
     board.size == 0 || odds_left? && board.size == 1
+  end
+
+  def left_with_even?
+    board.inject(:+).even?
   end
 
   def winner

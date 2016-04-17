@@ -8,6 +8,24 @@ describe 'computer versus computer games of varing difficulty' do
     ComputerTurn.instance_variable_set :@turns, nil
   end
 
+  context 'starting board of [1]' do
+    let(:one_number_odd) {[1]}
+    let(:one_number_game_fail) {Game.new(one_number_odd)}
+
+    it 'returns NO SOLUTION ' do
+      expect(one_number_game_fail.play).to eq('NO SOLUTION')
+    end
+  end
+
+  context 'starting board of [2]' do
+    let(:one_number_even) {[2]}
+    let(:one_number_game_win) {Game.new(one_number_even)}
+
+    it 'returns \'0, 0\'' do
+      expect(one_number_game_win.play).to eq('0,0')
+    end
+  end
+
   context 'starting board of [1, 2]' do
     let(:easy_array) {[1, 2]}
     let(:easy_game) {Game.new(easy_array)}
