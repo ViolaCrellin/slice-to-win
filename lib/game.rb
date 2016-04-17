@@ -17,19 +17,12 @@ class Game
     odds_left? ? find_legal_moves : declare_outcome
   end
 
+  private
+
   def declare_outcome
-    print turn_klass.turns
     return "NO SOLUTION" if winner == :player2
     return turn_klass.find_first_turn.join(", ") if winner == :player1
-    reset_game
   end
-
-  def reset_game
-    turn_klass.turns = {}
-    return
-  end
-
-  private
 
   def find_legal_moves
     @legal_moves = legal_moves_klass.new(board)
@@ -38,6 +31,7 @@ class Game
 
   def next_turn
     current_turn = turn_klass.new(optimal_moves_available, board)
+    print optimal_moves_available
     turn_klass.add(current_turn.slice_choice)
     @board = current_turn.update_board
     play

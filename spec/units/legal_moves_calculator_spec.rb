@@ -2,9 +2,8 @@ require 'legal_moves_calculator'
 
 describe LegalMovesCalculator do
   let(:easy_board) {[1, 2]}
-
-  let(:move_klass) {double :move_klass}
-  let(:move) {double :move}
+  let(:move_klass) {double(:move_klass, new: move)}
+  let(:move) {double(:move, chunk_size: 1, sum: 2, need_splitting?: false)}
   let(:moves_calc_klass) {described_class}
   subject(:moves_calc) {described_class.new(easy_board, move_klass)}
 

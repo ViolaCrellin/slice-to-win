@@ -24,20 +24,19 @@ class ComputerTurn
   end
 
   def make_choice(moves_available)
-    return first_turn_smallest(moves_available) if ComputerTurn.turns == {}
+    return first_turn_smallest(moves_available) if ComputerTurn.find_first_turn == nil
     moves_available.first.slice_position
-  end
-
-  def first_turn_smallest(moves_available)
-    # puts "first turns available \n"
-    # moves_available.partition {|move| move.splittable}
-    # require 'pry'; binding.pry
-    moves_available.sort{|a, b| a.sum <=> b.sum}.first.slice_position
   end
 
   def update_board
     return slice_single if single_slice?
     return slice_chunk if !single_slice?
+  end
+
+  private
+
+  def first_turn_smallest(moves_available)
+    moves_available.sort{|a, b| a.sum <=> b.sum}.first.slice_position
   end
 
   def slice_single

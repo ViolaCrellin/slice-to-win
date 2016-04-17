@@ -2,7 +2,7 @@ require './lib/game.rb'
 
 describe Game do
   let(:legal_moves_klass) {double(:legal_moves_klass, new: legal_moves)}
-  let(:turn_klass) {double(:turn_klass, new: turn, add: turn, turns: {})}
+  let(:turn_klass) {double(:turn_klass, new: turn, turns: {}, find_first_turn: [1, 1])}
   let(:move) {double :move}
   subject(:game) {described_class.new(easy_board, legal_moves_klass, turn_klass)}
 
@@ -12,8 +12,6 @@ describe Game do
   context 'easy game' do
     let(:legal_moves) {double(:legal_moves, odd_sized: [move], even_sized: [])}
     let(:turn) {double(:turn, slice_choice: [1, 1], update_board: [1])}
-    # let(:turn_klass) {double(:turn_klass, new: turn)}
-
     let(:easy_board) {[1, 2]}
     let(:game_double) { game }
 
@@ -40,8 +38,10 @@ describe Game do
     describe '#play' do
 
       it 'finds out if there are any odds on the current board - needed to win' do
+        allow(game).to receive(:winner).and_return(:player1)
         allow(turn).to receive(:update_board).and_return([1])
-        expect(game).to receive(:odds_left?).exactly(2).times.and_call_original
+        expect(game).to receive(:odds_left?).exactly(2).times.and_return(true, false)
+        allow(turn_klass).to receive(:add).with([1, 1])
         game.play
       end
 
@@ -54,62 +54,30 @@ describe Game do
 
     describe '#find_legal_moves' do
 
-      after do
-        game.send(:find_legal_moves)
-      end
-
-      it 'creates a new legal moves calculator to calculate the legal moves' do
+      it 'updates the games\' legal moves attribute with new legal moves' do
         expect(legal_moves_klass).to receive(:new).with(game.board)
-      end
-
-      it 'updates the games\' legal moves attribute' do
+        allow(game).to receive(:next_turn)
         game.send(:find_legal_moves)
         expect(game.legal_moves).to eq(legal_moves)
       end
 
       it 'with the legal move calculations it decides if a new turn is necessary' do
         expect(game).to receive(:next_turn)
+        expect(game).not_to receive(:declare_outcome)
+        game.send(:find_legal_moves)
       end
 
-      it 'not prompt next turn if no legal move found, instead will declare outcome' do
+      it 'will not prompt next turn if no legal move found, instead will declare outcome' do
         allow(game).to receive(:right_sized_chunk_available?).and_return(false)
         expect(game).not_to receive(:next_turn)
         expect(game).to receive(:declare_outcome)
+        game.send(:find_legal_moves)
       end
-
     end
+
+    # describe '#next_turn' do
+
   end
 end
 
-# context 'Class methods' do
 #
-#
-#   describe '.players' do
-#
-#     it 'stores @players when .add is called' do
-#       expect{player.add(player_id, player_name)}.to change{player.players.size}.by(1)
-#     end
-#   end
-#
-#   describe '.add' do
-#
-#     before do
-#       player.add(player_id, player_name)
-#     end
-#
-#     it '.adds a Player class object to the @players hash' do
-#       expect(player.players).to include ({player_id => player_name})
-#     end
-#   end
-#
-#   describe '.look_up' do
-#
-#     before do
-#       player.add(player_id, player_name)
-#     end
-#
-#     it 'will .look_up a Player class object' do
-#       expect(player.look_up(player_id)).to eq player_name
-#     end
-#   end
-# end
