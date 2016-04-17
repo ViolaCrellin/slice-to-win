@@ -1,5 +1,3 @@
-# responsible for looking at which first turns will win the game
-# responsible for recording itself as the first turn in the game
 class ComputerTurn
 
   class << self
@@ -26,7 +24,15 @@ class ComputerTurn
   end
 
   def make_choice(moves_available)
+    return first_turn_smallest(moves_available) if ComputerTurn.turns == {}
     moves_available.first.slice_position
+  end
+
+  def first_turn_smallest(moves_available)
+    # puts "first turns available \n"
+    # moves_available.partition {|move| move.splittable}
+    # require 'pry'; binding.pry
+    moves_available.sort{|a, b| a.sum <=> b.sum}.first.slice_position
   end
 
   def update_board
@@ -46,10 +52,6 @@ class ComputerTurn
 
   def single_slice?
     slice_choice[0] == slice_choice[1]
-  end
-
-  def make_choice(moves_available)
-    moves_available.first.slice_position
   end
 
 end

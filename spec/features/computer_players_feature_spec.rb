@@ -4,6 +4,10 @@ require 'computer_turn'
 
 describe 'computer versus computer games of varing difficulty' do
 
+  before(:each) do
+    ComputerTurn.instance_variable_set :@turns, nil
+  end
+
   context 'starting board of [1, 2]' do
     let(:easy_array) {[1, 2]}
     let(:easy_game) {Game.new(easy_array)}
@@ -28,6 +32,24 @@ describe 'computer versus computer games of varing difficulty' do
 
     it 'returns NO SOLUTION' do
       expect(easy_game_fail_2.play).to eq('NO SOLUTION')
+    end
+  end
+
+  context 'starting board of [4, 5, 3, 7, 2]' do
+    let(:easy_array_win) {[4, 5, 3, 7, 2]}
+    let(:easy_game_win) {Game.new(easy_array_win)}
+
+    it 'returns \'1, 2\'' do
+      expect(easy_game_win.play).to eq('1, 2')
+    end
+  end
+
+  context 'starting board of [8, 4, 1, 7, 17, 20]' do
+    let(:med_array) {[8, 4, 1, 7, 17, 20]}
+    let(:med_game) {Game.new(med_array)}
+
+    it 'returns \'1, 1\' ' do
+      expect(med_game.play).to eq('1, 1')
     end
   end
 end

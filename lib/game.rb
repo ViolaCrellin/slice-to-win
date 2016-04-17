@@ -1,7 +1,3 @@
-# responsible for initializing the game with the board.
-# responsible for calling new situation_assessment
-# will assign players to the classes they have access to.
-# ComputerPlayer will be able to access legal moves calculator
 require 'legal_moves_calculator'
 require 'computer_turn'
 
@@ -22,12 +18,19 @@ class Game
   end
 
   def declare_outcome
+    print turn_klass.turns
     return "NO SOLUTION" if winner == :player2
     return turn_klass.find_first_turn.join(", ") if winner == :player1
+    reset_game
+  end
+
+  def reset_game
+    turn_klass.turns = {}
+    return
   end
 
   private
-  
+
   def find_legal_moves
     @legal_moves = legal_moves_klass.new(board)
     right_sized_chunk_available? ? next_turn : declare_outcome
@@ -40,7 +43,6 @@ class Game
     play
   end
 
-
   def optimal_moves_available
     even_sized_chunk_needed? ? legal_moves.even_sized : legal_moves.odd_sized
   end
@@ -50,11 +52,15 @@ class Game
   end
 
   def even_sized_chunk_needed?
-    board.size.odd?
+    board.size.odd? && odds_only.size != 1
   end
 
   def odds_left?
-    board.select {|x| x.odd?}.any?
+    odds_only.any?
+  end
+
+  def odds_only
+    board.select {|x| x.odd?}
   end
 
   def game_over?
