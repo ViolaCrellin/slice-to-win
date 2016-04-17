@@ -36,11 +36,11 @@ describe 'computer versus computer games of varing difficulty' do
   end
 
   context 'starting board of [1, 2, 3]' do
-    let(:easy_array_fail) {[1, 2, 3]}
-    let(:easy_game_fail) {Game.new(easy_array_fail)}
+    let(:easy_array_three) {[1, 2, 3]}
+    let(:easy_game_take_all) {Game.new(easy_array_three)}
 
     it 'returns NO SOLUTION' do
-      expect(easy_game_fail.play).to eq('NO SOLUTION')
+      expect(easy_game_take_all.play).to eq('0,2')
     end
   end
 

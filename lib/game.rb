@@ -13,11 +13,13 @@ class Game
     @legal_moves_klass = legal_moves_klass
   end
 
-  def play
-    odds_left.size.odd? 
+  # def play
+  #   odds_left.size.odd?
+  # end
 
   def play
-    odds_left? ? find_legal_moves : declare_outcome
+    return "0,#{board.size - 1}" if left_with_even?
+    game_over? ?  declare_outcome : find_legal_moves
   end
 
   private
