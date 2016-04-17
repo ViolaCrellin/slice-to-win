@@ -14,10 +14,6 @@ attr_reader :chunk_size, :evens, :slice_position, :sum, :sliced_numbers
     sum.odd? && chunk_size > 1
   end
 
-  # def evenly_splittable?
-  #   evens == true && chunk_size > 1
-  # end
-
   def split_move
     number_taken_out = @sliced_numbers.pop
     @sum -= number_taken_out

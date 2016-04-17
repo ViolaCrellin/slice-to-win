@@ -74,10 +74,5 @@ describe Game do
         game.send(:find_legal_moves)
       end
     end
-
-    # describe '#next_turn' do
-
   end
 end
-
-#
