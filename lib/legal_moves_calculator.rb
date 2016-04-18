@@ -50,4 +50,8 @@ class LegalMovesCalculator
     moves
   end
 
+  def chunked_chunks
+    moves_available
+  end
+
 end

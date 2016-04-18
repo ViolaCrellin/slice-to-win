@@ -13,30 +13,31 @@ class Game
     @legal_moves_klass = legal_moves_klass
   end
 
-  # def play
-  #   odds_left.size.odd?
-  # end
-
   def play
-    return "0,#{board.size - 1}" if left_with_even?
     game_over? ?  declare_outcome : find_legal_moves
   end
 
   private
 
   def declare_outcome
-    return "NO SOLUTION" if winner == :player2
     return turn_klass.find_first_turn.join(", ") if winner == :player1
+    return "NO SOLUTION" if winner == :player2
   end
 
   def find_legal_moves
     @legal_moves = legal_moves_klass.new(board)
+    return "0, #{board.size - 1}" if left_with_even_sum?
     right_sized_chunk_available? ? next_turn : declare_outcome
   end
+
 
   def next_turn
     current_turn = turn_klass.new(optimal_moves_available, board)
     turn_klass.add(current_turn.slice_choice)
+    set_up_next_turn(current_turn)
+  end
+
+  def set_up_next_turn(current_turn)
     @board = current_turn.update_board
     play
   end
@@ -61,17 +62,25 @@ class Game
     board.select {|x| x.odd?}
   end
 
+  def evens_only
+    board - odds_only
+  end
+
   def game_over?
     board.size == 0 || odds_left? && board.size == 1
   end
 
-  def left_with_even?
+  def left_with_even_sum?
     board.inject(:+).even?
   end
 
   def winner
     turns_taken = turn_klass.turns.length
     turns_taken.odd? && game_over? ? :player1 : :player2
+  end
+
+  def first_turn?
+    turn_klass.turns.size == 0
   end
 
 end

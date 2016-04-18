@@ -22,7 +22,7 @@ describe 'computer versus computer games of varing difficulty' do
     let(:one_number_game_win) {Game.new(one_number_even)}
 
     it 'returns \'0, 0\'' do
-      expect(one_number_game_win.play).to eq('0,0')
+      expect(one_number_game_win.play).to eq('0, 0')
     end
   end
 
@@ -35,12 +35,21 @@ describe 'computer versus computer games of varing difficulty' do
     end
   end
 
+  context 'starting board of [2, 2]' do
+    let(:easy_array_evens) {[2, 2]}
+    let(:easy_game_evens) {Game.new(easy_array_evens)}
+
+    it 'returns a slice position of \'0, 1\' ' do
+      expect(easy_game_evens.play).to eq('0, 1')
+    end
+  end
+
   context 'starting board of [1, 2, 3]' do
     let(:easy_array_three) {[1, 2, 3]}
     let(:easy_game_take_all) {Game.new(easy_array_three)}
 
     it 'returns NO SOLUTION' do
-      expect(easy_game_take_all.play).to eq('0,2')
+      expect(easy_game_take_all.play).to eq('0, 2')
     end
   end
 
@@ -50,6 +59,24 @@ describe 'computer versus computer games of varing difficulty' do
 
     it 'returns NO SOLUTION' do
       expect(easy_game_fail_2.play).to eq('NO SOLUTION')
+    end
+  end
+
+  context 'starting board of [8, 4, 1, 7]' do
+    let(:four_array_win) {[8, 4, 1, 7]}
+    let(:four_game) {Game.new(four_array_win)}
+
+    it 'returns \'1, 1\' ' do
+      expect(four_game.play).to eq("1, 1")
+    end
+  end
+
+  context 'starting board of [8, 4, 1, 12]' do
+    let(:four_array_win_two) {[8, 4, 1, 14]}
+    let(:four_game_2) {Game.new(four_array_win_two)}
+
+    it 'returns \'1, 1\' ' do
+      expect(four_game_2.play).to eq("1, 1")
     end
   end
 
@@ -67,7 +94,7 @@ describe 'computer versus computer games of varing difficulty' do
     let(:med_game) {Game.new(med_array)}
 
     it 'returns \'1, 1\' ' do
-      expect(med_game.play).to eq('1, 1')
+      expect(med_game.play).to eq('NO SOLUTION')
     end
   end
 end
