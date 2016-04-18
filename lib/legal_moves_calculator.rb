@@ -20,28 +20,7 @@ class LegalMovesCalculator
   def odd_sized_chunks_available
     make_moves.select {|move| move.chunk_size.odd?} + split_out_single_evens
   end
-  #
-  # def moves_available
-  #   all_chunked_moves.select { |move| move.sum.even? }
-  #   # + single_evens
-  # end
 
-  #
-  # def moves_generator
-  #   current_board.chunk { |int| int.even? }.map do |even, run|
-  #     slice_position = [current_board.index(run.first), current_board.index(run.last)]
-  #     move_klass.new(slice_position, run, even)
-  #   end
-  # end
-  #
-  # #
-  #
-  # def all_chunked_moves
-  #   moves_generator.each do |move|
-  #     move.split_move if move.need_splitting?
-  #   end
-  # end
-  #
   def split_out_single_evens
     moves = []
     current_board.each_with_index do |int, index|
@@ -50,7 +29,6 @@ class LegalMovesCalculator
          moves << move_klass.new(single_even_position, [int])
       end
     end
-    # print moves
     moves
   end
 
@@ -70,26 +48,5 @@ class LegalMovesCalculator
       move_klass.new(slice, run)
     end
   end
-
-
-
-# has to be a splittable even sized evens chunk
-# has to be
-#
-# even board 4
-# even number of chunks? 2
-# means you need to take a single?
-#
-  #
-  # def how_many_need_splitting
-  #   moves_generator.select {|move| move.need_splitting?}
-  #   # moves_available.size.even? && evens_in_chunks
-  #   # the odds have to be taken together.
-  #   # moves_generator.partition {|move| move.evens }
-  # end
-  #
-  # def evens_in_chunks
-  #   # moves_generator.partition {|move| move.evens }.first
-  # end
 
 end

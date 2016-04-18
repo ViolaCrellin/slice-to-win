@@ -1,13 +1,21 @@
 class ComputerTurn
 
-  class << self
+  class << self; attr_accessor :turns, :opening_turns
 
     def turns
       @turns ||= {}
     end
 
+    def opening_turns
+      @opening_turns ||= []
+    end
+
     def add(slice_made)
       turns[turns.size] = slice_made
+    end
+
+    def save_first_turns(legal_moves)
+      opening_turns << legal_moves
     end
 
     def find_first_turn
@@ -24,12 +32,40 @@ class ComputerTurn
     @slice_choice = make_choice
   end
 
+  def take_all?
+    left_with_even_sum? && moves_available.size < 1
+    # && odd_sized_chunks_available.empty?
+  end
+
+  def take_all_but_one
+    moves_available.select{|move| move.chunk_size - 1 == board.size}
+  end
+
+
+  def killer_move?
+    take_all_but_one.any? && (board.unshift.odd? || board.pop.odd?)
+  end
+
+  def take_all
+    [0, (board.size-1)]
+  end
+
   def make_choice
+
     # print moves_available
     # puts "******* moves available ^^^^^^^^"
-    return first_turn_smallest if first_turn?
-    take_biggest_chunk.slice_position
+    if !killer_move? && !take_all? && !first_turn?
+      take_biggest_chunk.slice_position
+    elsif killer_move?
+      take_all_but_one
+    elsif take_all?
+      take_all
+    else first_turn?
+      first_turn_smallest
+    end
+
   end
+
 
   def update_board
     return slice_single if single_slice?
@@ -41,6 +77,7 @@ class ComputerTurn
   end
 
   private
+
 
   def first_turn?
     ComputerTurn.find_first_turn == nil
@@ -62,6 +99,10 @@ class ComputerTurn
 
   def single_slice?
     slice_choice[0] == slice_choice[1]
+  end
+
+  def left_with_even_sum?
+    board.inject(:+).even?
   end
 
 end

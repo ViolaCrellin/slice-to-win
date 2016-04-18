@@ -17,21 +17,26 @@ class Game
     game_over? ?  declare_outcome : find_legal_moves
   end
 
+
   private
 
   def declare_outcome
-    puts "\n *************** ^^^^^ turn history ^^^^^^^ *****************"
+    puts "\n ALL TURNS TAKEN \n"
     print turn_klass.turns
-    puts "\n *************** ^^^^^ turn history ^^^^^^^ *****************"
+    puts "\n****************\n"
 
-    return turn_klass.find_first_turn.join(", ") if winner == :player1
-    return "NO SOLUTION" if winner == :player2
+    winner == :player1 ? turn_klass.find_first_turn.join(", ") : "NO SOLUTION"
   end
+
 
   def find_legal_moves
     @legal_moves = legal_moves_klass.new(board)
-    # next_turn
-    return next_turn if left_with_even_sum?
+    turn_klass.save_first_turns(optimal_moves_available) if first_turn?
+
+    print "\n saved initial legal moves on first turn \n"
+    print turn_klass.opening_turns
+    puts "\n ****************** \n"
+
     right_sized_chunk_available? ? next_turn : declare_outcome
   end
 
@@ -67,16 +72,16 @@ class Game
     board.select {|x| x.odd?}
   end
 
+  def evens_only
+    board.select {|x| x.even?}
+  end
+
   def game_over?
     board.size == 0 || forced_to_take_last_odd?
   end
 
   def forced_to_take_last_odd?
     odds_left? && board.size == 1
-  end
-
-  def left_with_even_sum?
-    board.inject(:+).even?
   end
 
   def winner
