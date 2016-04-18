@@ -54,7 +54,7 @@ describe ComputerTurn do
     end
 
       it 'calls make_choice with all the moves available' do
-        expect_any_instance_of(turn).to receive(:make_choice).with(moves_available)
+        expect_any_instance_of(turn).to receive(:make_choice)
         turn.new(moves_available, board)
       end
 

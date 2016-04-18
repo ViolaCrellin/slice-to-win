@@ -20,13 +20,18 @@ class Game
   private
 
   def declare_outcome
+    puts "\n *************** ^^^^^ turn history ^^^^^^^ *****************"
+    print turn_klass.turns
+    puts "\n *************** ^^^^^ turn history ^^^^^^^ *****************"
+
     return turn_klass.find_first_turn.join(", ") if winner == :player1
     return "NO SOLUTION" if winner == :player2
   end
 
   def find_legal_moves
     @legal_moves = legal_moves_klass.new(board)
-    return "0, #{board.size - 1}" if left_with_even_sum?
+    # next_turn
+    return next_turn if left_with_even_sum?
     right_sized_chunk_available? ? next_turn : declare_outcome
   end
 
@@ -42,12 +47,12 @@ class Game
     play
   end
 
-  def optimal_moves_available
-    even_sized_chunk_needed? ? legal_moves.even_sized : legal_moves.odd_sized
-  end
-
   def right_sized_chunk_available?
     even_sized_chunk_needed? ? legal_moves.even_sized.any? : legal_moves.odd_sized.any?
+  end
+
+  def optimal_moves_available
+    even_sized_chunk_needed? ? legal_moves.even_sized : legal_moves.odd_sized
   end
 
   def even_sized_chunk_needed?
@@ -62,12 +67,12 @@ class Game
     board.select {|x| x.odd?}
   end
 
-  def evens_only
-    board - odds_only
+  def game_over?
+    board.size == 0 || forced_to_take_last_odd?
   end
 
-  def game_over?
-    board.size == 0 || odds_left? && board.size == 1
+  def forced_to_take_last_odd?
+    odds_left? && board.size == 1
   end
 
   def left_with_even_sum?
@@ -76,11 +81,11 @@ class Game
 
   def winner
     turns_taken = turn_klass.turns.length
-    turns_taken.odd? && game_over? ? :player1 : :player2
+    turns_taken.odd? && forced_to_take_last_odd? ? :player1 : :player2
   end
 
   def first_turn?
-    turn_klass.turns.size == 0
+    turn_klass.turns.any?
   end
 
 end

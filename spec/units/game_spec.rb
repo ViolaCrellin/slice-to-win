@@ -35,7 +35,7 @@ describe Game do
       end
     end
 
-    describe '#play' do
+    xdescribe '#play' do
 
       it 'finds out if there are any odds on the current board - needed to win' do
         allow(game).to receive(:winner).and_return(:player1)

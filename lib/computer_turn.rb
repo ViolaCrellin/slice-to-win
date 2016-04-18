@@ -16,16 +16,19 @@ class ComputerTurn
 
   end
 
-  attr_accessor :slice_choice, :board
+  attr_accessor :slice_choice, :board, :moves_available
 
   def initialize(moves_available, board)
-    @slice_choice = make_choice(moves_available)
+    @moves_available = moves_available
     @board = board
+    @slice_choice = make_choice
   end
 
-  def make_choice(moves_available)
-    return first_turn_smallest(moves_available) if ComputerTurn.find_first_turn == nil
-    moves_available.first.slice_position
+  def make_choice
+    # print moves_available
+    # puts "******* moves available ^^^^^^^^"
+    return first_turn_smallest if first_turn?
+    take_biggest_chunk.slice_position
   end
 
   def update_board
@@ -33,9 +36,17 @@ class ComputerTurn
     return slice_chunk if !single_slice?
   end
 
+  def take_biggest_chunk
+    moves_available.sort{|a, b| a.chunk_size <=> b.chunk_size}.first
+  end
+
   private
 
-  def first_turn_smallest(moves_available)
+  def first_turn?
+    ComputerTurn.find_first_turn == nil
+  end
+
+  def first_turn_smallest
     moves_available.sort{|a, b| a.sum <=> b.sum}.first.slice_position
   end
 
