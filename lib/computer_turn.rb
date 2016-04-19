@@ -52,17 +52,18 @@ class ComputerTurn
   end
 
   def first_turn_logic
-    if take_biggest_chunk.last.splittable?
-      sort_by_smallest_sum.first.slice_position
+    # attempts = []
+    # while moves_available.size < attempts.size
+      # sort_by_smallest_sum.first.slice_position
       # (split it in half? might need to sort then also by chunk size)
       # right_sized_smallest_chunk = sort_by_smallest_sum.select do |move|
       #   (move.chunk_size.even? && board.size.odd?) || (move.chunk_size.odd? && board.size.even?)
       # end
       # return right_sized_smallest_chunk.first.slice_position if right_sized_smallest_chunk.any?
       # take_biggest_chunk.last.slice_position
-    else
+    # else
       take_biggest_chunk.last.slice_position
-    end
+    # end
   end
 
 
