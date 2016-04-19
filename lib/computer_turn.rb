@@ -36,11 +36,36 @@ class ComputerTurn
     if take_all?
       take_all
     elsif first_turn?
-      first_turn_smallest
+      first_turn_logic
+      # sort{|a, b| a.sum <=> b.sum }.first.slice_position
+
+      # need to take out first turn logic so that you can record all possible first turns and see which to take
+      # first_turn_smallest
     else
-      take_biggest_chunk.slice_position
+      take_biggest_chunk.last.slice_position
     end
   end
+
+  def update_board
+    return slice_single if single_slice?
+    return slice_chunk if !single_slice?
+  end
+
+  def first_turn_logic
+    if take_biggest_chunk.last.splittable?
+      sort_by_smallest_sum.first.slice_position
+      # (split it in half? might need to sort then also by chunk size)
+      # right_sized_smallest_chunk = sort_by_smallest_sum.select do |move|
+      #   (move.chunk_size.even? && board.size.odd?) || (move.chunk_size.odd? && board.size.even?)
+      # end
+      # return right_sized_smallest_chunk.first.slice_position if right_sized_smallest_chunk.any?
+      # take_biggest_chunk.last.slice_position
+    else
+      take_biggest_chunk.last.slice_position
+    end
+  end
+
+
 
   private
 
@@ -60,21 +85,18 @@ class ComputerTurn
     [0, (board.size - 1)]
   end
 
-  def update_board
-    return slice_single if single_slice?
-    return slice_chunk if !single_slice?
-  end
 
   def take_biggest_chunk
-    moves_available.sort{|a, b| a.chunk_size <=> b.chunk_size}.last
+    moves_available.sort{|a, b| a.chunk_size <=> b.chunk_size}
+    # .last
   end
 
   def first_turn?
     ComputerTurn.find_first_turn == nil
   end
 
-  def first_turn_smallest
-    moves_available.sort{|a, b| a.sum <=> b.sum}.first.slice_position
+  def sort_by_smallest_sum
+    moves_available.sort{|a, b| a.sum <=> b.sum}
   end
 
   def slice_single

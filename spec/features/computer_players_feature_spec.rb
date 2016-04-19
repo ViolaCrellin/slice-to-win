@@ -104,7 +104,7 @@ describe 'computer versus computer games of varing difficulty' do
     let(:med_game) {Game.new(med_array)}
 
     it 'returns \'1, 1\' ' do
-      expect(med_game.play).to eq('NO SOLUTION')
+      expect(med_game.play).to eq('1, 1')
     end
   end
 end

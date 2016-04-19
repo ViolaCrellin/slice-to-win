@@ -91,8 +91,16 @@ class Game
   end
 
   def winner
+    player1_wins? ? :player1 : :player2
+  end
+
+  def player1_wins?
+    which_player_just_played == :player1 && (next_player_forced_odd? || game_over?)
+  end
+
+  def which_player_just_played
     turns_taken = turn_klass.turns.length
-    turns_taken.odd? && next_player_forced_odd? ? :player1 : :player2
+    turns_taken.odd? ? :player1 : :player2
   end
 
   def first_turn?
