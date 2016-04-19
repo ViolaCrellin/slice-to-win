@@ -17,13 +17,14 @@ class Game
   end
 
   def make_first_turn
-    @first_turn = first_turn.new(all_moves_available, board)
-    
+    # find_legal_moves
+    initial_moves = legal_moves_klass.new(board)
+    @first_turn = first_turn.new(initial_moves, board.dup)
+    play
   end
 
-
   def play
-    game_over? ?  declare_outcome : find_legal_moves
+    game_over? ?  declare_outcome : assess_moves
   end
 
   private
@@ -34,26 +35,28 @@ class Game
     winner == :player1 ? turn_klass.find_first_turn.slice_position.join(", ") : try_again
   end
 
+
   def find_legal_moves
     @legal_moves = legal_moves_klass.new(board)
+  end
+
+  def assess_moves
+    find_legal_moves
     right_sized_chunk_available? ? next_turn : declare_outcome
   end
 
-  def all_moves_available
-    legal_moves.even_sized + legal_moves.odd_sized
-  end
-
   def try_again
-    turn_klass.turns = {}
+    first_turn.update_fails(turn_klass.find_first_turn.slice_position)
     @board = first_turn.original_board
-    require 'pry'; binding.pry
-    first_turn.update_fails(turn_klass.find_first_turn)
+    turn_klass.turns = {}
     return "NO SOLUTION" if first_turn.moves_available.empty?
-    next_turn
+    next_turn(first_turn.moves_available)
   end
 
-  def next_turn
-    current_turn = turn_klass.new(optimal_moves_available, board)
+  def next_turn(still_to_try=nil)
+    moves_to_choose_from = (still_to_try ||= optimal_moves_available)
+    # require 'pry'; binding.pry
+    current_turn = turn_klass.new(moves_to_choose_from, board)
     turn_klass.add(current_turn.move_choice)
     set_up_next_turn(current_turn)
   end
@@ -100,8 +103,7 @@ class Game
   end
 
   def which_player_just_played
-    turns_taken = turn_klass.turns.length
-    turns_taken.odd? ? :player1 : :player2
+    turn_klass.turns.length.odd? ? :player1 : :player2
   end
 
   def first_turn?

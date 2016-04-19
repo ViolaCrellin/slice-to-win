@@ -13,7 +13,7 @@ describe 'computer versus computer games of varing difficulty' do
     let(:one_number_game_fail) {Game.new(one_number_odd)}
 
     it 'returns NO SOLUTION ' do
-      expect(one_number_game_fail.play).to eq('NO SOLUTION')
+      expect(one_number_game_fail.make_first_turn).to eq('NO SOLUTION')
     end
   end
 
@@ -22,7 +22,7 @@ describe 'computer versus computer games of varing difficulty' do
     let(:one_number_game_win) {Game.new(one_number_even)}
 
     it 'returns \'0, 0\'' do
-      expect(one_number_game_win.play).to eq('0, 0')
+      expect(one_number_game_win.make_first_turn).to eq('0, 0')
     end
   end
 
@@ -31,7 +31,7 @@ describe 'computer versus computer games of varing difficulty' do
     let(:easy_game) {Game.new(easy_array)}
 
     it 'returns a slice position of \'1, 1\' ' do
-      expect(easy_game.play).to eq('1, 1')
+      expect(easy_game.make_first_turn).to eq('1, 1')
     end
   end
 
@@ -41,7 +41,7 @@ describe 'computer versus computer games of varing difficulty' do
     let(:easy_game_evens) {Game.new(easy_array_evens)}
 
     it 'returns a slice position of \'0, 1\' ' do
-      expect(easy_game_evens.play).to eq('0, 1')
+      expect(easy_game_evens.make_first_turn).to eq('0, 1')
     end
   end
 
@@ -50,7 +50,7 @@ describe 'computer versus computer games of varing difficulty' do
     let(:easy_game_take_all) {Game.new(easy_array_three)}
 
     it 'returns \'0, 2\'' do
-      expect(easy_game_take_all.play).to eq('0, 2')
+      expect(easy_game_take_all.make_first_turn).to eq('0, 2')
     end
   end
 
@@ -59,7 +59,7 @@ describe 'computer versus computer games of varing difficulty' do
     let(:easy_game_lose) {Game.new(easy_array_lose)}
 
     it 'returns \'NO SOLUTION\'' do
-      expect(easy_game_lose.play).to eq('NO SOLUTION')
+      expect(easy_game_lose.make_first_turn).to eq('NO SOLUTION')
     end
   end
 
@@ -68,7 +68,7 @@ describe 'computer versus computer games of varing difficulty' do
     let(:easy_game_fail_2) {Game.new(easy_array_fail_2)}
 
     it 'returns \'0, 2\'' do
-      expect(easy_game_fail_2.play).to eq("0, 2")
+      expect(easy_game_fail_2.make_first_turn).to eq("0, 2")
     end
   end
 
@@ -77,7 +77,7 @@ describe 'computer versus computer games of varing difficulty' do
     let(:four_game) {Game.new(four_array_lose)}
 
     it 'returns \'NO SOLUTION\' ' do
-      expect(four_game.play).to eq("NO SOLUTION")
+      expect(four_game.make_first_turn).to eq("NO SOLUTION")
     end
   end
 
@@ -86,7 +86,7 @@ describe 'computer versus computer games of varing difficulty' do
     let(:four_game_2) {Game.new(four_array_win_two)}
 
     it 'returns \'1, 1\' ' do
-      expect(four_game_2.play).to eq("1, 1")
+      expect(four_game_2.make_first_turn).to eq("1, 1")
     end
   end
 
@@ -95,7 +95,7 @@ describe 'computer versus computer games of varing difficulty' do
     let(:easy_game_win) {Game.new(easy_array_win)}
 
     it 'returns \'1, 2\'' do
-      expect(easy_game_win.play).to eq('1, 2')
+      expect(easy_game_win.make_first_turn).to eq('1, 2')
     end
   end
 
@@ -104,7 +104,7 @@ describe 'computer versus computer games of varing difficulty' do
     let(:med_game) {Game.new(med_array)}
 
     it 'returns \'1, 1\' ' do
-      expect(med_game.play).to eq('1, 1')
+      expect(med_game.make_first_turn).to eq('1, 1')
     end
   end
 end

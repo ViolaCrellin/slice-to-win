@@ -5,12 +5,13 @@ class FirstTurn
 
   def initialize(moves_available, board)
     @original_board = board
-    @attempts = {}
-    @moves_available = moves_available
+    @attempts = []
+    @moves_available = moves_available.even_sized + moves_available.odd_sized
   end
 
   def update_fails(failed_move)
-    @moves_available - [failed_move]
+    attempts << failed_move
+    moves_available.delete_if {|move| move.slice_position == failed_move}
   end
 
 end

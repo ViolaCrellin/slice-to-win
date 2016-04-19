@@ -2,7 +2,7 @@ require 'first_turn'
 
 class ComputerTurn
 
-  class << self; attr_accessor :turns, :opening_turns
+  class << self; attr_accessor :turns
 
     def turns
       @turns ||= {}
