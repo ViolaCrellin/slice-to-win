@@ -9,8 +9,17 @@ class FirstTurn
     @moves_available = moves_available.even_sized + moves_available.odd_sized
   end
 
+  def log_attempt(attempt, winner)
+    puts "\n inside log attempts\n"
+    print attempt
+    attempts << [attempt, winner]
+  end
+
+  def no_success?
+    attempts.select{|attempt| attempt[1] == :player1}
+  end
+
   def update_fails(failed_move)
-    attempts << failed_move
     moves_available.delete_if {|move| move.slice_position == failed_move}
   end
 

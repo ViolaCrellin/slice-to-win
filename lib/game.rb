@@ -17,7 +17,6 @@ class Game
   end
 
   def make_first_turn
-    # find_legal_moves
     initial_moves = legal_moves_klass.new(board)
     @first_turn = first_turn.new(initial_moves, board.dup)
     play
@@ -30,11 +29,11 @@ class Game
   private
 
   def declare_outcome
+    return "NO SOLUTION" if first_turn.moves_available.empty? && first_turn.no_success?
     puts "\n INSIDE DECLARE OUTCOME AND THIS IS THE TURN HISTORY \n"
     puts turn_klass.turns
     winner == :player1 ? turn_klass.find_first_turn.slice_position.join(", ") : try_again
   end
-
 
   def find_legal_moves
     @legal_moves = legal_moves_klass.new(board)
@@ -46,16 +45,15 @@ class Game
   end
 
   def try_again
+    first_turn.log_attempt(turn_klass.find_first_turn.slice_position, winner)
     first_turn.update_fails(turn_klass.find_first_turn.slice_position)
     @board = first_turn.original_board
     turn_klass.turns = {}
-    return "NO SOLUTION" if first_turn.moves_available.empty?
     next_turn(first_turn.moves_available)
   end
 
   def next_turn(still_to_try=nil)
     moves_to_choose_from = (still_to_try ||= optimal_moves_available)
-    # require 'pry'; binding.pry
     current_turn = turn_klass.new(moves_to_choose_from, board)
     turn_klass.add(current_turn.move_choice)
     set_up_next_turn(current_turn)
