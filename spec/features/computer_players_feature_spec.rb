@@ -76,8 +76,8 @@ describe 'computer versus computer games of varing difficulty' do
     let(:four_array_lose) {[8, 4, 1, 7]}
     let(:four_game) {Game.new(four_array_lose)}
 
-    it 'returns \'NO SOLUTION\' ' do
-      expect(four_game.make_first_turn).to eq("NO SOLUTION")
+    it 'returns \'1, 1\' ' do
+      expect(four_game.make_first_turn).to eq('1, 1')
     end
   end
 
@@ -94,8 +94,8 @@ describe 'computer versus computer games of varing difficulty' do
     let(:easy_array_win) {[4, 5, 3, 7, 2]}
     let(:easy_game_win) {Game.new(easy_array_win)}
 
-    it 'returns \'1, 2\'' do
-      expect(easy_game_win.make_first_turn).to eq('1, 2')
+    it 'returns \'4, 4\'' do
+      expect(easy_game_win.make_first_turn).to eq('4, 4')
     end
   end
 

@@ -9,10 +9,8 @@ class FirstTurn
     @moves_available = moves_available.even_sized + moves_available.odd_sized
   end
 
-  def log_attempt(attempt, winner)
-    puts "\n inside log attempts\n"
-    print attempt
-    attempts << [attempt, winner]
+  def log_attempt(attempt)
+    @attempts << attempt
   end
 
   def no_success?

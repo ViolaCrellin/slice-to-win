@@ -31,8 +31,18 @@ class Game
   def declare_outcome
     return "NO SOLUTION" if first_turn.moves_available.empty? && first_turn.no_success?
     puts "\n INSIDE DECLARE OUTCOME AND THIS IS THE TURN HISTORY \n"
-    puts turn_klass.turns
-    winner == :player1 ? turn_klass.find_first_turn.slice_position.join(", ") : try_again
+    print turn_klass.turns
+    puts "\n INSIDE DECLARE OUTCOME AND THIS IS THE FIRST TURN ATTEMPTS HISTORY\n"
+    print first_turn.attempts
+    if winner == :player1
+      if first_turn.attempts.size > 1
+        first_turn.attempts[0].join(", ")
+      else
+        turn_klass.find_first_turn.slice_position.join(", ")
+      end
+    else
+      try_again
+    end
   end
 
   def find_legal_moves
@@ -45,7 +55,7 @@ class Game
   end
 
   def try_again
-    first_turn.log_attempt(turn_klass.find_first_turn.slice_position, winner)
+    first_turn.log_attempt(turn_klass.find_first_turn.slice_position)
     first_turn.update_fails(turn_klass.find_first_turn.slice_position)
     @board = first_turn.original_board
     turn_klass.turns = {}
