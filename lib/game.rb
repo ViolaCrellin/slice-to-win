@@ -1,55 +1,60 @@
 require 'legal_moves_calculator'
 require 'computer_turn'
+require 'first_turn'
+
 
 class Game
 
   attr_accessor :board
-  attr_reader :legal_moves_klass, :turn_klass, :legal_moves, :original_board
+  attr_reader :legal_moves_klass, :turn_klass, :legal_moves, :first_turn
 
-  def initialize(board, legal_moves_klass=LegalMovesCalculator, turn_klass=ComputerTurn)
-    @original_board = board
+  def initialize(board, legal_moves_klass=LegalMovesCalculator, turn_klass=ComputerTurn, first_turn=FirstTurn)
+    @first_turn = first_turn
     @board = board
     @legal_moves = :uncalculated
     @turn_klass = turn_klass
     @legal_moves_klass = legal_moves_klass
   end
 
+  def make_first_turn
+    @first_turn = first_turn.new(all_moves_available, board)
+    
+  end
+
+
   def play
     game_over? ?  declare_outcome : find_legal_moves
   end
-
 
   private
 
   def declare_outcome
     puts "\n INSIDE DECLARE OUTCOME AND THIS IS THE TURN HISTORY \n"
     puts turn_klass.turns
-    winner == :player1 ? turn_klass.find_first_turn.join(", ") : "NO SOLUTION"
+    winner == :player1 ? turn_klass.find_first_turn.slice_position.join(", ") : try_again
   end
-
-  # def try_again
-  #   return "NO SOLUTION" if turn_klass.opening_turns.empty?
-  #   @board = original_board
-  #   failed_slice = turn_klass.find_first_turn
-  #   # puts "\n INSIDE TRY AGAIN AND THIS SLICE FAILED \n"
-  #   # print failed_slice
-  #   @turn_klass.find_first_turn = {}
-  #   @legal_moves = legal_moves_klass.new(board, failed_slice)
-  #   next_turn
-  # end
-
-
 
   def find_legal_moves
     @legal_moves = legal_moves_klass.new(board)
-    turn_klass.save_first_turns(optimal_moves_available) if first_turn?
     right_sized_chunk_available? ? next_turn : declare_outcome
   end
 
+  def all_moves_available
+    legal_moves.even_sized + legal_moves.odd_sized
+  end
+
+  def try_again
+    turn_klass.turns = {}
+    @board = first_turn.original_board
+    require 'pry'; binding.pry
+    first_turn.update_fails(turn_klass.find_first_turn)
+    return "NO SOLUTION" if first_turn.moves_available.empty?
+    next_turn
+  end
 
   def next_turn
     current_turn = turn_klass.new(optimal_moves_available, board)
-    turn_klass.add(current_turn.slice_choice)
+    turn_klass.add(current_turn.move_choice)
     set_up_next_turn(current_turn)
   end
 
@@ -76,10 +81,6 @@ class Game
 
   def odds_only
     board.select {|x| x.odd?}
-  end
-
-  def evens_only
-    board.select {|x| x.even?}
   end
 
   def game_over?

@@ -9,8 +9,4 @@ attr_reader :chunk_size, :slice_position, :sum, :sliced_numbers
     @chunk_size = sliced_numbers.size
   end
 
-  def splittable?
-    chunk_size.even? || sliced_numbers.select {|int| int.even?}.any?
-  end
-
 end

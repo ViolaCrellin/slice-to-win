@@ -1,3 +1,5 @@
+require 'first_turn'
+
 class ComputerTurn
 
   class << self; attr_accessor :turns, :opening_turns
@@ -6,16 +8,8 @@ class ComputerTurn
       @turns ||= {}
     end
 
-    def opening_turns
-      @opening_turns ||= []
-    end
-
     def add(slice_made)
       turns[turns.size] = slice_made
-    end
-
-    def save_first_turns(legal_moves)
-      opening_turns << legal_moves
     end
 
     def find_first_turn
@@ -24,26 +18,25 @@ class ComputerTurn
 
   end
 
-  attr_accessor :slice_choice, :board, :moves_available
+  attr_accessor :slice_choice, :board, :moves_available, :move_choice
 
   def initialize(moves_available, board)
     @moves_available = moves_available
     @board = board
-    @slice_choice = make_choice
+    @move_choice = make_choice
+    @slice_choice = move_choice.slice_position
   end
 
   def make_choice
-    if take_all?
-      take_all
-    elsif first_turn?
-      first_turn_logic
-      # sort{|a, b| a.sum <=> b.sum }.first.slice_position
-
-      # need to take out first turn logic so that you can record all possible first turns and see which to take
-      # first_turn_smallest
-    else
-      take_biggest_chunk.last.slice_position
-    end
+    # if first_turn?
+    #   # create_first_turn
+    #
+    # # elsif take_all?
+    # #   take_all
+    # else
+      take_biggest_chunk.last
+      # .slice_position
+    # end
   end
 
   def update_board
@@ -70,21 +63,21 @@ class ComputerTurn
 
   private
 
-  def take_all?
-    left_with_even_sum? && moves_available.size.even?
-  end
+  # def take_all?
+  #   left_with_even_sum? && moves_available.size.even?
+  # end
 
-  def take_all_but_one
-    moves_available.select{|move| move.chunk_size - 1 == board.size}
-  end
+  # def take_all_but_one
+  #   moves_available.select{|move| move.chunk_size - 1 == board.size}
+  # end
 
-  def killer_move?
-    (board[0].odd? || board[-1].odd?)
-  end
-
-  def take_all
-    [0, (board.size - 1)]
-  end
+  # def killer_move?
+  #   (board[0].odd? || board[-1].odd?)
+  # end
+  #
+  # def take_all
+  #   [0, (board.size - 1)]
+  # end
 
 
   def take_biggest_chunk
@@ -92,9 +85,9 @@ class ComputerTurn
     # .last
   end
 
-  def first_turn?
-    ComputerTurn.find_first_turn == nil
-  end
+  # def first_turn?
+  #   ComputerTurn.find_first_turn == nil
+  # end
 
   def sort_by_smallest_sum
     moves_available.sort{|a, b| a.sum <=> b.sum}
@@ -114,8 +107,8 @@ class ComputerTurn
     slice_choice[0] == slice_choice[1]
   end
 
-  def left_with_even_sum?
-    board.inject(:+).even?
-  end
+  # def left_with_even_sum?
+  #   board.inject(:+).even?
+  # end
 
 end
